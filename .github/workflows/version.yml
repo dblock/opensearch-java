@@ -1,0 +1,17 @@
+name: Version
+on: pull_request
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - id: version
+        run: |
+          echo "::set-output name=version::$(cat gradle.properties | grep systemProp.version | cut -d' ' -f3 | cut -d\. -f1,2)"
+
+      - name: Show the version
+        run: |
+          echo "Unreleased ${{ steps.version.outputs.version }}"
