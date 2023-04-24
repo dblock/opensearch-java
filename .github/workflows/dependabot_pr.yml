@@ -29,10 +29,14 @@ jobs:
         with:
           token: ${{ steps.github_app_token.outputs.token }}
 
+      - id: read-version
+        run: |
+          echo "::set-output name=version::$(cat gradle.properties | grep systemProp.version | cut -d' ' -f3 | cut -d\. -f1 -f2)"
+
       - name: Update the changelog
         uses: dangoslen/dependabot-changelog-helper@v2
         with:
-          version: 'Unreleased'
+          version: 'Unreleased ${{ steps.read_version.outputs.version }}'
 
       - name: Commit the changes
         uses: stefanzweifel/git-auto-commit-action@v4
